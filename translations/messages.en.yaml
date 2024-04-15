@@ -1,3 +1,14 @@
 login:
   page:
     title: Let's Log In!
+    sub_title: Sign in to start your session
+  form:
+    email:
+      placeholder: Email
+    password:
+      placeholder: Password
+    remember_me:
+      label: Remember Me
+    button: Sign In
+  link:
+    reset_password: I forgot my password

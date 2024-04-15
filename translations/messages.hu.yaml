@@ -1,3 +1,14 @@
 login:
   page:
     title: Jelentkezz be!
+    sub_title: Jelentkezz be a kezdéshez
+  form:
+    email:
+      placeholder: Email cím
+    password:
+      placeholder: Jelszó
+    remember_me:
+      label: Emlékezz rám
+    button: Bejelentkezés
+  link:
+    reset_password: Elfelejtettem a jelszavamat
