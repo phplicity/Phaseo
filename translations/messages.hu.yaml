@@ -12,3 +12,11 @@ login:
     button: Bejelentkezés
   link:
     reset_password: Elfelejtettem a jelszavamat
+reset_password:
+  request:
+    title: Jelszó emlékeztető
+    sub_title: Elfelejtetted a jelszavadat? Itt könnyen igényelhetsz újat.
+  form:
+    button: Új jelszó küldése
+  link:
+    login: Bejelentkezés

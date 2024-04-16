@@ -1,5 +1,89 @@
 {% extends 'core/base.html.twig' %}
 
+{% block htmlPageTitle %}{{ "login.page.title"|trans }}{% endblock %}
+
+{% block headerStylesheets %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    {{ importmap('login') }}
+{% endblock %}
+
+{% block htmlBodyProperties %}
+    class="hold-transition login-page"
+{% endblock %}
+
+{% block body %}
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="/"><img src="{{ asset('core/images/crm_full_logo.png') }}" alt="Logo"></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">{{ "login.page.sub_title"|trans }}</p>
+
+                <form method="post">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <div class="mb-3">
+                            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('core_public_logout') }}">Logout</a>
+                        </div>
+                    {% endif %}
+
+                    <div class="input-group mb-3">
+                        <input type="email" placeholder="{{ "login.form.email.placeholder"|trans }}" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" placeholder="{{ "login.form.password.placeholder"|trans }}" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="icheck-primary">
+                                <input type="checkbox" name="_remember_me">
+                                <label for="remember">
+                                    {{ "login.form.remember_me.label"|trans }}
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-5">
+                            <button type="submit" class="btn btn-primary btn-block">{{ "login.form.button"|trans }}</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <input type="hidden" name="_target_path" value="/{{ app.request.locale }}/dashboard">
+                </form>
+
+                <p class="mb-1">
+                    <a href="/{{ app.request.locale }}/reset-password">{{ "login.link.reset_password"|trans }}</a>
+                </p>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+{% endblock %}
+
+
+
+
+
+{% extends 'core/base.html.twig' %}
+
 {% block title %}Reset your password{% endblock %}
 
 {% block body %}

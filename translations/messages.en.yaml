@@ -12,3 +12,11 @@ login:
     button: Sign In
   link:
     reset_password: I forgot my password
+reset_password:
+  request:
+    title: Reset your password
+    sub_title: You forgot your password? Here you can easily retrieve a new password.
+  form:
+    button: Request new password
+  link:
+    login: Login
