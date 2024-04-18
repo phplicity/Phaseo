@@ -17,36 +17,35 @@ class ChangePasswordFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'options' => [
-                    'attr' => [
-                        'autocomplete' => 'new-password',
-                    ],
+            ->add('password', PasswordType::class, [
+                'constraints' => [
+                    new NotBlank([
+                                     'message' => 'reset_password.form.error_blank',
+                                 ]),
+                    new Length([
+                                   'min' => 12,
+                                   'minMessage' => 'reset_password.form.error_min',
+                                   // max length allowed by Symfony for security reasons
+                                   'max' => 4096,
+                               ]),
+                    new PasswordStrength(),
+                    new NotCompromisedPassword(),
                 ],
-                'first_options' => [
-                    'constraints' => [
-                        new NotBlank([
-                            'message' => 'Please enter a password',
-                        ]),
-                        new Length([
-                            'min' => 12,
-                            'minMessage' => 'Your password should be at least {{ limit }} characters',
-                            // max length allowed by Symfony for security reasons
-                            'max' => 4096,
-                        ]),
-                        new PasswordStrength(),
-                        new NotCompromisedPassword(),
-                    ],
-                    'label' => 'New password',
+                'attr' => [
+                    'autocomplete' => 'new-password',
+                    'autofocus' => true,
+                    'class' => 'form-control',
+                    'placeholder' => 'reset_password.form.password',
                 ],
-                'second_options' => [
-                    'label' => 'Repeat Password',
+                'label' => false,
+            ])
+            ->add('confirmPassword', PasswordType::class, [
+                'attr' => [
+                    'autocomplete' => 'new-password',
+                    'class' => 'form-control',
+                    'placeholder' => 'reset_password.form.confirm_password',
                 ],
-                'invalid_message' => 'The password fields must match.',
-                // Instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'mapped' => false,
+                'label' => false,
             ])
         ;
     }

@@ -1,6 +1,6 @@
 {% extends 'core/base.html.twig' %}
 
-{% block htmlPageTitle %}{{ "login.page.title"|trans }}{% endblock %}
+{% block htmlPageTitle %}{{ "reset_password.reset.title"|trans }}{% endblock %}
 
 {% block headerStylesheets %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -19,29 +19,22 @@
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">{{ "login.page.sub_title"|trans }}</p>
+                <p class="login-box-msg">{{ "reset_password.reset.sub_title"|trans }}</p>
 
-                <form method="post">
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                    {% endif %}
-
-                    {% if app.user %}
-                        <div class="mb-3">
-                            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('core_public_logout') }}">Logout</a>
-                        </div>
-                    {% endif %}
-
+                {{ form_start(resetForm) }}
+                    {% for flash_error in app.flashes('reset_password_error') %}
+                        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                    {% endfor %}
                     <div class="input-group mb-3">
-                        <input type="email" placeholder="{{ "login.form.email.placeholder"|trans }}" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+                        {{ form_widget(resetForm.password) }}
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span class="fas fa-lock"></span>
                             </div>
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" placeholder="{{ "login.form.password.placeholder"|trans }}" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                        {{ form_widget(resetForm.confirmPassword) }}
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -49,27 +42,15 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-7">
-                            <div class="icheck-primary">
-                                <input type="checkbox" name="_remember_me">
-                                <label for="remember">
-                                    {{ "login.form.remember_me.label"|trans }}
-                                </label>
-                            </div>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-5">
-                            <button type="submit" class="btn btn-primary btn-block">{{ "login.form.button"|trans }}</button>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block">{{ "reset_password.form.button_change"|trans }}</button>
                         </div>
                         <!-- /.col -->
                     </div>
+                {{ form_end(resetForm) }}
 
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                    <input type="hidden" name="_target_path" value="/{{ app.request.locale }}/dashboard">
-                </form>
-
-                <p class="mb-1">
-                    <a href="/{{ app.request.locale }}/reset-password">{{ "login.link.reset_password"|trans }}</a>
+                <p class="mt-3 mb-1">
+                    <a href="/{{ app.request.locale }}/login">{{ "reset_password.link.login"|trans }}</a>
                 </p>
             </div>
             <!-- /.login-card-body -->
@@ -78,19 +59,3 @@
     <!-- /.login-box -->
 {% endblock %}
 
-
-
-
-
-{% extends 'core/base.html.twig' %}
-
-{% block title %}Reset your password{% endblock %}
-
-{% block body %}
-    <h1>Reset your password</h1>
-
-    {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
-        <button class="btn btn-primary">Reset password</button>
-    {{ form_end(resetForm) }}
-{% endblock %}

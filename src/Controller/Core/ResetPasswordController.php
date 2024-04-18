@@ -65,7 +65,7 @@ class ResetPasswordController extends AbstractController
             $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
         }
 
-        return $this->render('reset_password/check_email.html.twig', [
+        return $this->render('core/reset_password/check_email.html.twig', [
             'resetToken' => $resetToken,
         ]);
     }
@@ -122,10 +122,10 @@ class ResetPasswordController extends AbstractController
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
 
-            return $this->redirectToRoute('default_page');
+            return $this->redirectToRoute('core_public_login');
         }
 
-        return $this->render('reset_password/reset.html.twig', [
+        return $this->render('core/reset_password/reset.html.twig', [
             'resetForm' => $form,
         ]);
     }
@@ -161,7 +161,7 @@ class ResetPasswordController extends AbstractController
             ->from(new Address('mailer@your-domain.com', 'Phaseo Mail Bot'))
             ->to($user->getEmail())
             ->subject('Your password reset request')
-            ->htmlTemplate('reset_password/email.html.twig')
+            ->htmlTemplate('core/reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,
             ])

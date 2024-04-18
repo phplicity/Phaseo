@@ -1,11 +1,37 @@
 {% extends 'core/base.html.twig' %}
 
-{% block title %}Password Reset Email Sent{% endblock %}
+{% block htmlPageTitle %}{{ "reset_password.check.title"|trans }}{% endblock %}
+
+{% block headerStylesheets %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    {{ importmap('login') }}
+{% endblock %}
+
+{% block htmlBodyProperties %}
+    class="hold-transition login-page"
+{% endblock %}
 
 {% block body %}
-    <p>
-        If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.
-        This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-    </p>
-    <p>If you don't receive an email please check your spam folder or <a href="{{ path('core_public_forgot_password_request') }}">try again</a>.</p>
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="/"><img src="{{ asset('core/images/crm_full_logo.png') }}" alt="Logo"></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p>
+                            {{ "reset_password.check.info_line_1"|trans }}
+                            {{ "reset_password.check.info_line_2"|trans }} {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+                        </p>
+                        <p>{{ "reset_password.check.info_line_3"|trans }} <a href="{{ path('core_public_forgot_password_request') }}">{{ "reset_password.check.link_text"|trans }}</a>.</p>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
 {% endblock %}
