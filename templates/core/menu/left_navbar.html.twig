@@ -1,0 +1,5 @@
+{% for menuItem in menuItems %}
+    <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{ path(menuItem.path) }}" class="nav-link">{{ menuItem.title|trans({}, 'menu') }}</a>
+    </li>
+{% endfor %}
