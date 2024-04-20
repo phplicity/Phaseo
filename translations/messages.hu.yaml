@@ -13,6 +13,13 @@ login:
   link:
     reset_password: Elfelejtettem a jelszavamat
 reset_password:
+  email:
+    subject: A jelszó cseréd folyamatban
+    sender_name: Phaseo Email Automata
+    content_accost: Üdvözöllek!
+    content_line1: A jelszavad beállításához, kérlek kattints az alábbi linkre
+    content_line2: A link lejárati ideje
+    content_farewell: Üdv!
   request:
     title: Jelszó emlékeztető
     sub_title: Elfelejtetted a jelszavadat? Itt könnyen igényelhetsz újat.

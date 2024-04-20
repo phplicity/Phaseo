@@ -130,7 +130,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $translator): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $tr): RedirectResponse
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
@@ -158,9 +158,9 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('mailer@your-domain.com', 'Phaseo Mail Bot'))
+            ->from(new Address($this->getParameter('app.common_email_address'), $tr->trans('reset_password.email.sender_name')))
             ->to($user->getEmail())
-            ->subject('Your password reset request')
+            ->subject($tr->trans('reset_password.email.subject'))
             ->htmlTemplate('core/reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,

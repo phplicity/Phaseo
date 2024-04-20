@@ -13,6 +13,13 @@ login:
   link:
     reset_password: I forgot my password
 reset_password:
+  email:
+    subject: Your password reset request
+    sender_name: Phaseo Mail Bot
+    content_accost: Hi!
+    content_line1: To reset your password, please visit the following link
+    content_line2: This link will expire in
+    content_farewell: Cheers!
   request:
     title: Reset your password
     sub_title: You forgot your password? Here you can easily retrieve a new password.
@@ -35,4 +42,3 @@ reset_password:
   reset:
     title: Reset your password
     sub_title: You are only one step a way from your new password, recover your password now.
-

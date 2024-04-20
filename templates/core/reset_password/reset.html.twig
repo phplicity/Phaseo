@@ -32,6 +32,7 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
+                        <span id="change_password_form_password-error" class="error invalid-feedback" style="display:block">{{ form_errors(resetForm.password) }}</span>
                     </div>
                     <div class="input-group mb-3">
                         {{ form_widget(resetForm.confirmPassword) }}
@@ -40,6 +41,7 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
+                        <span id="change_password_form_confirmPassword-error" class="error invalid-feedback" style="display:block">{{ form_errors(resetForm.confirmPassword) }}</span>
                     </div>
                     <div class="row">
                         <div class="col-12">
