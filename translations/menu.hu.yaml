@@ -4,3 +4,5 @@ menu:
   language_navbar:
     title_english: Angol
     title_hungarian: Magyar
+  sidebar_navbar:
+    title_user: Felhasználók

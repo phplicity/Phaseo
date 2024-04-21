@@ -1,0 +1,25 @@
+<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+    {% for menuItem in menuItems %}
+        <li class="nav-item">
+            <a href="{% if menuItem.children is empty %}{{ path(menuItem.path) }}{% else %}#{% endif %}" class="nav-link{% if menuItem.isActive %} active{% endif %}">
+                <i class="nav-icon {{ menuItem.class }}"></i>
+                <p>
+                    {{ menuItem.title|trans({}, 'menu') }}
+                    {% if menuItem.children is not empty %}<i class="right fas fa-angle-left"></i>{% endif %}
+                </p>
+            </a>
+            {% if menuItem.children is not empty %}
+                <ul class="nav nav-treeview">
+                    {% for subMenuItem in menuItem.children %}
+                        <li class="nav-item">
+                            <a href="{{ path(subMenuItem.path) }}" class="nav-link{% if subMenuItem.isActive %} active{% endif %}">
+                                <i class="{{ subMenuItem.class }}"></i>
+                                <p>{{ subMenuItem.title|trans({}, 'menu') }}</p>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

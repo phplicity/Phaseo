@@ -20,7 +20,7 @@ class LanguageController extends AbstractController
             ? LanguageNavbarDto::LANGUAGE_CODE_ENGLISH_ROUTE
             : $languageCode
         ;
-        
+
         return $this->redirectToRoute('core_admin_dashboard.' . $lang);
     }
 }

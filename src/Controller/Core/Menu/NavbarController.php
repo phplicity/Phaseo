@@ -4,6 +4,7 @@ namespace App\Controller\Core\Menu;
 
 use App\Dto\Core\LanguageNavbarDto;
 use App\Dto\Core\LeftNavbarDto;
+use App\Dto\Core\SidebarNavbarDto;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,6 +43,23 @@ class NavbarController extends AbstractController
                     $request->getLocale() === LanguageNavbarDto::LANGUAGE_CODE_HUNGARIAN,
                     LanguageNavbarDto::LANGUAGE_CODE_HUNGARIAN
                 ),
+            ],
+        ]);
+    }
+
+    #[Route('/sidebar-navbar/{activeTitle}', name: 'core_admin_menu_sidebar_navbar', defaults: ['activeTitle' => ''])]
+    #[IsGranted('ROLE_USER')]
+    public function sidebarNavbar(string $activeTitle): Response
+    {
+        return $this->render('core/menu/sidebar_navbar.html.twig', [
+            'menuItems' => [
+                new SidebarNavbarDto(
+                    'core_admin_user_list',
+                    'menu.sidebar_navbar.title_user',
+                    'menu.sidebar_navbar.title_user' === $activeTitle,
+                    'fas fa-solid fa-user',
+                    []
+                )
             ],
         ]);
     }
