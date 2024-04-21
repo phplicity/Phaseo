@@ -26,6 +26,16 @@
                     </li>
                     {{ render(path('core_admin_menu_left_navbar')) }}
                 </ul>
+
+                <!-- Right navbar links -->
+                <ul class="navbar-nav ml-auto">
+                    {{ render(path('core_admin_menu_language_navbar')) }}
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </a>
+                    </li>
+                </ul>
             </nav>
             <!-- /.navbar -->
 
