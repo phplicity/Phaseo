@@ -12,3 +12,33 @@ login:
     button: Bejelentkezés
   link:
     reset_password: Elfelejtettem a jelszavamat
+reset_password:
+  email:
+    subject: A jelszó cseréd folyamatban
+    sender_name: Phaseo Email Automata
+    content_accost: Üdvözöllek!
+    content_line1: A jelszavad beállításához, kérlek kattints az alábbi linkre
+    content_line2: A link lejárati ideje
+    content_farewell: Üdv!
+  request:
+    title: Jelszó emlékeztető
+    sub_title: Elfelejtetted a jelszavadat? Itt könnyen igényelhetsz újat.
+  form:
+    button: Új jelszó küldése
+    password: Jelszó
+    confirm_password: Jelszó újból
+    button_change: Jelszó cseréje
+    error_blank: Kérem írjon be egy jelszót
+    error_min: A jelszónak legalább 12 karakter hosszúnak kell lennie
+    error_invalid: A beírt jelszavak nem egyeznek meg
+  link:
+    login: Bejelentkezés
+  check:
+    title: Password Reset Email Sent
+    info_line_1: Amennyiben a beírt email címhez tartozik profil, egy email-t küldünk, amelyben megtalálja a linket, ahol a jelszavát frissítheti.
+    info_line_2: A link lejárati ideje
+    info_line_3: Amennyiben nem kapta meg az email-t, kérem ellenőrizze a spam mappát vagy
+    link_text: próbálja meg újra
+  reset:
+    title: Jelszó cseréje
+    sub_title: Egy lépésre vagy az új jelszavad beállításától, cseréld le a jelszavad most.

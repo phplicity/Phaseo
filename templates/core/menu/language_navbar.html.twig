@@ -1,0 +1,16 @@
+<li class="nav-item dropdown">
+    {% for menuItem in menuItems %}
+        {% if menuItem.isActive %}
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="flag-icon flag-icon-{{ menuItem.languageCode }}"></i>
+            </a>
+        {% endif %}
+    {% endfor %}
+    <div class="dropdown-menu dropdown-menu-right p-0">
+        {% for menuItem in menuItems %}
+            <a href="{{ path(menuItem.path, {languageCode: menuItem.languageCode}) }}" class="dropdown-item{% if menuItem.isActive %} active{% endif %}">
+                <i class="flag-icon flag-icon-{{ menuItem.languageCode }} mr-2"></i> {{ menuItem.title|trans({}, 'menu') }}
+            </a>
+        {% endfor %}
+    </div>
+</li>

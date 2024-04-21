@@ -16,6 +16,10 @@ return [
         'path' => './assets/core/login.js',
         'entrypoint' => true,
     ],
+    'loggedInStyles' => [
+        'path' => './assets/core/logged_in_styles.js',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],

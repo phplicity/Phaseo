@@ -2,3 +2,4 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.supported_locales: 'en|hu'
+    app.common_email_address: 'mailer@your-domain.com'

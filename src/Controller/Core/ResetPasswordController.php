@@ -65,7 +65,7 @@ class ResetPasswordController extends AbstractController
             $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
         }
 
-        return $this->render('reset_password/check_email.html.twig', [
+        return $this->render('core/reset_password/check_email.html.twig', [
             'resetToken' => $resetToken,
         ]);
     }
@@ -122,15 +122,15 @@ class ResetPasswordController extends AbstractController
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
 
-            return $this->redirectToRoute('default_page');
+            return $this->redirectToRoute('core_public_login');
         }
 
-        return $this->render('reset_password/reset.html.twig', [
+        return $this->render('core/reset_password/reset.html.twig', [
             'resetForm' => $form,
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $translator): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $tr): RedirectResponse
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
@@ -158,10 +158,10 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('mailer@your-domain.com', 'Phaseo Mail Bot'))
+            ->from(new Address($this->getParameter('app.common_email_address'), $tr->trans('reset_password.email.sender_name')))
             ->to($user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('reset_password/email.html.twig')
+            ->subject($tr->trans('reset_password.email.subject'))
+            ->htmlTemplate('core/reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,
             ])
