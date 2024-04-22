@@ -6,8 +6,9 @@
         <title>{% block htmlPageTitle %}{% endblock %}</title>
         <link rel="icon" href="{{ asset('core/images/crm_small_logo.png') }}">
 
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
         {% block headerStylesheets %}
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
             {{ importmap('loggedInStyles') }}
         {% endblock %}
 
@@ -90,9 +91,10 @@
         <script src="{{ asset('core/plugins/jquery/jquery.min.js') }}"></script>
         <!-- Bootstrap 4 -->
         <script src="{{ asset('core/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <!-- AdminLTE App -->
-        <script src="{{ asset('core/adminlte_dist/js/adminlte.min.js') }}"></script>
 
         {% block bodyJavascripts %}{% endblock %}
+
+        <!-- AdminLTE App -->
+        <script src="{{ asset('core/adminlte_dist/js/adminlte.min.js') }}"></script>
     </body>
 </html>

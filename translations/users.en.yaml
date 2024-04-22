@@ -1,3 +1,9 @@
 page:
   html_title_list: Users | List
   title_list: Users
+datatable:
+  title: User's list
+  headers:
+    id: Id
+    email: Email Address
+    roles: Roles

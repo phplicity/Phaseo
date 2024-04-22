@@ -20,6 +20,10 @@ return [
         'path' => './assets/core/logged_in_styles.js',
         'entrypoint' => true,
     ],
+    'usersStyles' => [
+        'path' => './assets/core/users_styles.js',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],

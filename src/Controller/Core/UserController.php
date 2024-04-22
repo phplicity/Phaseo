@@ -28,6 +28,14 @@ class UserController extends AbstractController
                 new BreadcrumbDto('core_admin_user_list', 'breadcrumb.users', true)
             ],
             'list' => $userService->getList(new SearchParamsDto($rq)),
+            'datatable' => [
+                'title' => 'datatable.title',
+                'headers' => [
+                    'datatable.headers.id',
+                    'datatable.headers.email',
+                    'datatable.headers.roles',
+                ],
+            ],
         ]);
     }
 }
