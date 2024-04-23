@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Core;
+namespace App\Repository\Core\User;
 
 use App\Dto\Core\SearchParamsDto;
 use App\Entity\Core\User;
@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private readonly UserListHelper $userListHelper)
     {
         parent::__construct($registry, User::class);
     }
@@ -42,29 +42,27 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function getList(SearchParamsDto $searchParamsDto): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb
-            ->select('u.id', 'u.email', 'u.roles')
-            ->from(User::class, 'u')
-            ->setMaxResults($searchParamsDto->getLimit())
-            ->setFirstResult($searchParamsDto->getPage())
-        ;
-
-        if (!empty($searchParamsDto->getSearchText())) {
-            $qb
-                ->andWhere('u.id = :id OR u.email LIKE :email')
-                ->setParameter(':id', $searchParamsDto->getSearchText())
-                ->setParameter(':email', '%' . $searchParamsDto->getSearchText() . '%')
-            ;
-        }
-
-        if (!empty($searchParamsDto->getOrderColumn())) {
-            $type = $searchParamsDto->getIsDescendingOrder() ? 'DESC' : 'ASC';
-            $qb->orderBy('u.' . $searchParamsDto->getOrderColumn(), $type);
-        } else {
-            $qb->orderBy('u.id', 'ASC');
-        }
+        $qb = $this->userListHelper->getBaseQueryBuilder($qb, false, $searchParamsDto);
+        $qb = $this->userListHelper->getSearchParamsForQueryBuilder($qb, $searchParamsDto);
+        $qb = $this->userListHelper->getOrderForQueryBuilder($qb, $searchParamsDto);
 
         return $qb->getQuery()->getArrayResult();
+    }
+
+    public function getListCount(): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $this->userListHelper->getBaseQueryBuilder($qb, true, null);
+
+        return (int) $qb->getQuery()->getScalarResult()[0][1];
+    }
+
+    public function getFilteredListCount(SearchParamsDto $searchParamsDto): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $this->userListHelper->getBaseQueryBuilder($qb, true, $searchParamsDto);
+        $qb = $this->userListHelper->getSearchParamsForQueryBuilder($qb, $searchParamsDto);
+
+        return (int) $qb->getQuery()->getScalarResult()[0][1];
     }
 }
