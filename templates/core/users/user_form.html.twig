@@ -25,38 +25,33 @@
         <!-- Users DataTable -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{ datatable.title|trans({}, 'users') }}</h3>
+                <h3 class="card-title">{{ form.title|trans({}, 'users') }}</h3>
 
                 <div class="card-tools">
                     <button
                             type="button"
                             class="btn btn-tool"
-                            title="{{ 'page.buttons.add_new_user'|trans({}, 'users') }}"
-                            onclick="location.href = '{{ path('core_admin_user_administration') }}'"
+                            title="{{ 'page.buttons.users_list'|trans({}, 'users') }}"
+                            onclick="location.href = '{{ path('core_admin_user_list') }}'"
                     >
-                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-list"></i>
                     </button>
                 </div>
             </div>
             <!-- /.card-header -->
 
-            <div class="card-body">
-                <table id="users-list" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            {% for header in datatable.headers %}
-                                <th>{{ header|trans({}, 'users') }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-            <!-- /.card-body -->
+            <!-- form start -->
+            {{ form_start(form.data) }}
+                <div class="card-body">
+                    {{ form_widget(form.data) }}
+                </div>
+                <!-- /.card-body -->
 
-            <div class="card-footer">
-                Footer
-            </div>
-            <!-- /.card-footer-->
+                <div class="card-footer">
+                    Footer
+                </div>
+                <!-- /.card-footer-->
+            {{ form_end(form.data) }}
         </div>
         <!-- /.card -->
 

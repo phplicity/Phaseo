@@ -1,9 +1,16 @@
 page:
   html_title_list: Users | List
+  html_title_form: Users | Administration
   title_list: Users
+  title_form: User Administration
+  buttons:
+    add_new_user: Add New User
+    users_list: User's List
 datatable:
   title: User's list
   headers:
     id: Id
     email: Email Address
     roles: Roles
+form:
+  title: User Administration

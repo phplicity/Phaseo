@@ -4,6 +4,7 @@ namespace App\Controller\Core;
 
 use App\Dto\Core\BreadcrumbDto;
 use App\Dto\Core\SearchParamsDto;
+use App\Form\Core\UserFormType;
 use App\Service\Core\DatatableService;
 use App\Service\Core\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,5 +55,37 @@ class UserController extends AbstractController
             )
         );
 
+    }
+
+    #[Route('/administration', name: 'core_admin_user_administration')]
+    #[IsGranted('ROLE_USER')]
+    public function userNew(Request $rq, UserService $userService, DatatableService $datatableService): Response
+    {
+        // TODO: jogosultság - UserVoter.php
+
+        $form = $this->createForm(UserFormType::class);
+
+        $form->handleRequest($rq);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle the form submission
+
+            // Maybe redirect to a "thank you" page.
+            return $this->redirectToRoute('Minden jó volt');
+        }
+
+        return $this->render('core/users/user_form.html.twig', [
+            'htmlPageTitle' => 'page.html_title_form',
+            'pageTitle' => 'page.title_form',
+            'breadcrumb' => [
+                new BreadcrumbDto('core_admin_dashboard', 'breadcrumb.dashboard', false),
+                new BreadcrumbDto('core_admin_user_list', 'breadcrumb.users', false),
+                new BreadcrumbDto('core_admin_user_administration', 'breadcrumb.user_form', true),
+            ],
+            'form' => [
+                'title' => 'form.title',
+                'data' => $form->createView(),
+            ],
+        ]);
     }
 }
