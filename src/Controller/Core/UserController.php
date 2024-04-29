@@ -4,13 +4,17 @@ namespace App\Controller\Core;
 
 use App\Dto\Core\BreadcrumbDto;
 use App\Dto\Core\SearchParamsDto;
+use App\Entity\Core\User;
+use App\Form\Core\ChangePasswordFormType;
 use App\Form\Core\UserFormType;
 use App\Service\Core\DatatableService;
 use App\Service\Core\UserService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -59,16 +63,26 @@ class UserController extends AbstractController
 
     #[Route('/administration', name: 'core_admin_user_administration')]
     #[IsGranted('ROLE_USER')]
-    public function userNew(Request $rq, UserService $userService, DatatableService $datatableService): Response
+    public function userNew(Request $rq, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
     {
         // TODO: jogosultság - UserVoter.php
 
-        $form = $this->createForm(UserFormType::class);
+        /** @var User $user */
+        $user = $this->getUser();
+        $formPwd = $this->createForm(ChangePasswordFormType::class, null, ['label' => true]);
 
-        $form->handleRequest($rq);
+        $formPwd->handleRequest($rq);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Handle the form submission
+        if ($formPwd->isSubmitted() && $formPwd->isValid()) {
+            // Encode(hash) the plain password, and set it.
+            $encodedPassword = $passwordHasher->hashPassword(
+                $user,
+                $formPwd->get('password')->getData()
+            );
+
+            $user->setPassword($encodedPassword);
+            $em->persist($user);
+            $em->flush();
 
             // Maybe redirect to a "thank you" page.
             return $this->redirectToRoute('Minden jó volt');
@@ -82,9 +96,10 @@ class UserController extends AbstractController
                 new BreadcrumbDto('core_admin_user_list', 'breadcrumb.users', false),
                 new BreadcrumbDto('core_admin_user_administration', 'breadcrumb.user_form', true),
             ],
-            'form' => [
-                'title' => 'form.title',
-                'data' => $form->createView(),
+            'formPassword' => [
+                'title' => 'form.password.title',
+                'button' => 'form.password.button',
+                'data' => $formPwd->createView(),
             ],
         ]);
     }

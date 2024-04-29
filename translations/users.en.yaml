@@ -13,4 +13,6 @@ datatable:
     email: Email Address
     roles: Roles
 form:
-  title: User Administration
+  password:
+    title: Password change
+    button: Change password

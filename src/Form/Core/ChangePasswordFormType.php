@@ -42,7 +42,7 @@ class ChangePasswordFormType extends AbstractType
                     'class' => 'form-control',
                     'placeholder' => 'reset_password.form.password',
                 ],
-                'label' => false,
+                'label' => $options['label'] ? 'reset_password.form.password' : false,
             ])
             ->add('confirmPassword', PasswordType::class, [
                 'attr' => [
@@ -50,7 +50,7 @@ class ChangePasswordFormType extends AbstractType
                     'class' => 'form-control',
                     'placeholder' => 'reset_password.form.confirm_password',
                 ],
-                'label' => false,
+                'label' => $options['label'] ? 'reset_password.form.confirm_password' : false,
             ])
         ;
     }

@@ -25,7 +25,7 @@
         <!-- Users DataTable -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{ form.title|trans({}, 'users') }}</h3>
+                <h3 class="card-title">{{ formPassword.title|trans({}, 'users') }}</h3>
 
                 <div class="card-tools">
                     <button
@@ -41,17 +41,26 @@
             <!-- /.card-header -->
 
             <!-- form start -->
-            {{ form_start(form.data) }}
+            {{ form_start(formPassword.data) }}
                 <div class="card-body">
-                    {{ form_widget(form.data) }}
+                    <div class="form-group">
+                        <label>{{ form_label(formPassword.data.password) }}</label>
+                        {{ form_widget(formPassword.data.password) }}
+                        <span class="error invalid-feedback" style="display:block">{{ form_errors(formPassword.data.password) }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ form_label(formPassword.data.confirmPassword) }}</label>
+                        {{ form_widget(formPassword.data.confirmPassword) }}
+                        <span class="error invalid-feedback" style="display:block">{{ form_errors(formPassword.data.confirmPassword) }}</span>
+                    </div>
                 </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                    Footer
+                    <button type="submit" class="btn btn-primary">{{ formPassword.button|trans({}, 'users') }}</button>
                 </div>
                 <!-- /.card-footer-->
-            {{ form_end(form.data) }}
+            {{ form_end(formPassword.data) }}
         </div>
         <!-- /.card -->
 
