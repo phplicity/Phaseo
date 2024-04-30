@@ -22,7 +22,49 @@
     <!-- Main content -->
     <section class="content">
 
-        <!-- Users DataTable -->
+        <!-- Settings card -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ formSettings.title|trans({}, 'users') }}</h3>
+
+                <div class="card-tools">
+                    <button
+                            type="button"
+                            class="btn btn-tool"
+                            title="{{ 'page.buttons.users_list'|trans({}, 'users') }}"
+                            onclick="location.href = '{{ path('core_admin_user_list') }}'"
+                    >
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+
+            <!-- Settings form start -->
+            {{ form_start(formSettings.data) }}
+            <div class="card-body">
+                <div class="form-group">
+                    {{ form_label(formSettings.data.email) }}
+                    {{ form_widget(formSettings.data.email) }}
+                    <span class="error invalid-feedback" style="display:block">{{ form_errors(formSettings.data.email) }}</span>
+                </div>
+                <div class="form-group">
+                    {{ form_label(formSettings.data.roles) }}
+                    {{ form_widget(formSettings.data.roles) }}
+                    <span class="error invalid-feedback" style="display:block">{{ form_errors(formSettings.data.roles) }}</span>
+                </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">{{ formSettings.button|trans({}, 'users') }}</button>
+            </div>
+            <!-- /.card-footer-->
+            {{ form_end(formSettings.data) }}
+        </div>
+        <!-- /.card -->
+
+        <!-- Password card -->
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">{{ formPassword.title|trans({}, 'users') }}</h3>
@@ -40,7 +82,7 @@
             </div>
             <!-- /.card-header -->
 
-            <!-- form start -->
+            <!-- Password form start -->
             {{ form_start(formPassword.data) }}
                 <div class="card-body">
                     <div class="form-group">

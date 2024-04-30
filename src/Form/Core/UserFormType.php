@@ -3,14 +3,12 @@
 namespace App\Form\Core;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
-use Symfony\Component\Validator\Constraints\PasswordStrength;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class UserFormType extends AbstractType
 {
@@ -22,33 +20,35 @@ class UserFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('password', PasswordType::class, [
+            ->add('email', EmailType::class, [
                 'constraints' => [
-                    new NotBlank([
-                                     'message' => $this->tr->trans('reset_password.form.error_blank'),
-                                 ]),
-                    new Length([
-                                   'min' => 12,
-                                   'minMessage' => $this->tr->trans('reset_password.form.error_min'),
-                                   // max length allowed by Symfony for security reasons
-                                   'max' => 4096,
-                               ]),
-                    new PasswordStrength(),
-                    new NotCompromisedPassword(),
+                    new Assert\NotBlank([
+                                            'message' => $this->tr->trans('form.settings.email_not_blank', [], 'users'),
+                                        ]),
+                    new Assert\Email([
+                                        'message' => $this->tr->trans('form.settings.email_not_valid', [], 'users'),
+                                     ]),
                 ],
                 'attr' => [
-                    'autocomplete' => 'new-password',
+                    'autocomplete' => 'email',
                     'autofocus' => true,
                     'class' => 'form-control',
-                    'placeholder' => 'reset_password.form.password',
+                    'placeholder' => $this->tr->trans('form.settings.email_place_holder', [], 'users'),
                 ],
+                'label' => $this->tr->trans('form.settings.email_label', [], 'users'),
             ])
-            ->add('confirmPassword', PasswordType::class, [
+            ->add('roles', TextType::class, [
+                'constraints' => [
+                    new Assert\NotBlank([
+                                            'message' => $this->tr->trans('form.settings.roles_not_blank', [], 'users'),
+                                        ]),
+                ],
                 'attr' => [
                     'autocomplete' => 'new-password',
                     'class' => 'form-control',
-                    'placeholder' => 'reset_password.form.confirm_password',
+                    'placeholder' => $this->tr->trans('form.settings.roles_place_holder', [], 'users'),
                 ],
+                'label' => $this->tr->trans('form.settings.roles_label', [], 'users'),
             ])
         ;
     }

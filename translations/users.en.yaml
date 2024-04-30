@@ -16,3 +16,13 @@ form:
   password:
     title: Password change
     button: Change password
+  settings:
+    title: Settings change
+    button: Change settings
+    email_not_blank: You must set the email address
+    email_not_valid: You must set a valid email address
+    roles_not_blank: You must set at least one role
+    email_label: Email
+    email_place_holder: Email address
+    roles_label: Roles
+    roles_place_holder: Roles

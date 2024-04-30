@@ -8,4 +8,5 @@ import './plugins/datatables-responsive/css/responsive.bootstrap4.min.css';
 import './plugins/datatables-buttons/css/buttons.bootstrap4.min.css';
 // Theme style
 import './adminlte_dist/css/adminlte.min.css';
-
+// Custom style
+import './custom_css/custom.css';

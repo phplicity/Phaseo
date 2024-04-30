@@ -61,32 +61,22 @@ class UserController extends AbstractController
 
     }
 
-    #[Route('/administration', name: 'core_admin_user_administration')]
+    #[Route(path: '/administration', name: 'core_admin_user_administration', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
-    public function userNew(Request $rq, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
+    public function userAdministration(): Response
     {
         // TODO: jogosultság - UserVoter.php
 
-        /** @var User $user */
-        $user = $this->getUser();
-        $formPwd = $this->createForm(ChangePasswordFormType::class, null, ['label' => true]);
+        $formPwd = $this->createForm(ChangePasswordFormType::class, null, [
+            'label' => true,
+            'action' => $this->generateUrl('core_admin_user_administration_password_change'),
+            'method' => 'POST',
+        ]);
 
-        $formPwd->handleRequest($rq);
-
-        if ($formPwd->isSubmitted() && $formPwd->isValid()) {
-            // Encode(hash) the plain password, and set it.
-            $encodedPassword = $passwordHasher->hashPassword(
-                $user,
-                $formPwd->get('password')->getData()
-            );
-
-            $user->setPassword($encodedPassword);
-            $em->persist($user);
-            $em->flush();
-
-            // Maybe redirect to a "thank you" page.
-            return $this->redirectToRoute('Minden jó volt');
-        }
+        $formSettings = $this->createForm(UserFormType::class, null, [
+            'action' => $this->generateUrl('core_admin_user_administration_user_settings_change'),
+            'method' => 'POST',
+        ]);
 
         return $this->render('core/users/user_form.html.twig', [
             'htmlPageTitle' => 'page.html_title_form',
@@ -101,6 +91,75 @@ class UserController extends AbstractController
                 'button' => 'form.password.button',
                 'data' => $formPwd->createView(),
             ],
+            'formSettings' => [
+                'title' => 'form.settings.title',
+                'button' => 'form.settings.button',
+                'data' => $formSettings->createView(),
+            ],
         ]);
+    }
+
+    #[Route(path: '/administration/password-change', name: 'core_admin_user_administration_password_change', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function passwordChange(Request $rq, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
+    {
+        // TODO: jogosultság - UserVoter.php
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $formPwd = $this->createForm(ChangePasswordFormType::class, null, [
+            'label' => true,
+            'action' => $this->generateUrl('custom_form_submit'),
+            'method' => 'POST',
+        ]);
+
+        $formPwd->handleRequest($rq);
+
+        if ($formPwd->isSubmitted() && $formPwd->isValid()) {
+            // Encode(hash) the plain password, and set it.
+            $encodedPassword = $passwordHasher->hashPassword(
+                $user,
+                $formPwd->get('password')->getData()
+            );
+
+            $user->setPassword($encodedPassword);
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('core_admin_user_administration');
+    }
+
+    #[Route(path: '/administration/user-settings-change', name: 'core_admin_user_administration_user_settings_change', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function userSettingsChange(Request $rq, EntityManagerInterface $em): Response
+    {
+        // TODO: jogosultság - UserVoter.php
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $formPwd = $this->createForm(ChangePasswordFormType::class, null, [
+            'label' => true,
+            'action' => $this->generateUrl('custom_form_submit'),
+            'method' => 'POST',
+        ]);
+
+        $formPwd->handleRequest($rq);
+
+        if ($formPwd->isSubmitted() && $formPwd->isValid()) {
+            // Encode(hash) the plain password, and set it.
+            $encodedPassword = $passwordHasher->hashPassword(
+                $user,
+                $formPwd->get('password')->getData()
+            );
+
+            $user->setPassword($encodedPassword);
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('core_admin_user_administration');
     }
 }
