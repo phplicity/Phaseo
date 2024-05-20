@@ -12,12 +12,16 @@ datatable:
     id: Id
     email: Email Address
     roles: Roles
+    actions: Actions
 form:
   password:
-    title: Password change
+    title: Password Change
     button: Change password
+  create:
+    title: User Create
+    button: Create User
   settings:
-    title: Settings change
+    title: Settings Change
     button: Change settings
     email_not_blank: You must set the email address
     email_not_valid: You must set a valid email address

@@ -6,7 +6,8 @@ use App\Dto\Core\BreadcrumbDto;
 use App\Dto\Core\SearchParamsDto;
 use App\Entity\Core\User;
 use App\Form\Core\ChangePasswordFormType;
-use App\Form\Core\UserFormType;
+use App\Form\Core\UserCreateFormType;
+use App\Form\Core\UserEditFormType;
 use App\Service\Core\DatatableService;
 use App\Service\Core\UserService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,6 +50,7 @@ class UserController extends AbstractController
 
         return new JsonResponse(
             $datatableService->convertSqlResultToDatatableResult(
+                $this->getUser(),
                 (int) $rq->get('draw', 1),
                 $userService->getListWithCount(
                     new SearchParamsDto(
@@ -61,9 +63,57 @@ class UserController extends AbstractController
 
     }
 
-    #[Route(path: '/administration', name: 'core_admin_user_administration', methods: ['GET'])]
+    #[Route(path: '/administration', name: 'core_admin_user_administration', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function userAdministration(): Response
+    public function userAdministration(Request $rq, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
+    {
+        // TODO: jogosultság - UserVoter.php
+
+        $formCreate = $this->createForm(UserCreateFormType::class, null, [
+            'label' => true,
+            'action' => $this->generateUrl('core_admin_user_administration'),
+            'method' => 'POST',
+        ]);
+
+        $formCreate->handleRequest($rq);
+
+        if ($formCreate->isSubmitted() && $formCreate->isValid()) {
+            // Create the new User
+            $user = New User();
+
+            $user->setEmail($formCreate->get('email')->getData());
+            $user->setRoles([$formCreate->get('roles')->getData()]);
+
+            // Encode(hash) the plain password, and set it.
+            $encodedPassword = $passwordHasher->hashPassword(
+                $user,
+                $formCreate->get('password')->getData()
+            );
+
+            $user->setPassword($encodedPassword);
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $this->render('core/users/user_create_form.html.twig', [
+            'htmlPageTitle' => 'page.html_title_form',
+            'pageTitle' => 'page.title_form',
+            'breadcrumb' => [
+                new BreadcrumbDto('core_admin_dashboard', 'breadcrumb.dashboard', false),
+                new BreadcrumbDto('core_admin_user_list', 'breadcrumb.users', false),
+                new BreadcrumbDto('core_admin_user_administration', 'breadcrumb.user_form', true),
+            ],
+            'formCreate' => [
+                'title' => 'form.create.title',
+                'button' => 'form.create.button',
+                'data' => $formCreate->createView(),
+            ],
+        ]);
+    }
+
+    #[Route(path: '/administration/edit', name: 'core_admin_user_administration_edit', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function userAdministrationEdit(): Response
     {
         // TODO: jogosultság - UserVoter.php
 
@@ -73,18 +123,19 @@ class UserController extends AbstractController
             'method' => 'POST',
         ]);
 
-        $formSettings = $this->createForm(UserFormType::class, null, [
+        $formSettings = $this->createForm(UserEditFormType::class, null, [
             'action' => $this->generateUrl('core_admin_user_administration_user_settings_change'),
             'method' => 'POST',
         ]);
 
-        return $this->render('core/users/user_form.html.twig', [
+        return $this->render('core/users/user_edit_form.html.twig', [
             'htmlPageTitle' => 'page.html_title_form',
             'pageTitle' => 'page.title_form',
             'breadcrumb' => [
                 new BreadcrumbDto('core_admin_dashboard', 'breadcrumb.dashboard', false),
                 new BreadcrumbDto('core_admin_user_list', 'breadcrumb.users', false),
-                new BreadcrumbDto('core_admin_user_administration', 'breadcrumb.user_form', true),
+                new BreadcrumbDto('core_admin_user_administration', 'breadcrumb.user_form', false),
+                new BreadcrumbDto('core_admin_user_administration_edit', 'breadcrumb.user_form', true),
             ],
             'formPassword' => [
                 'title' => 'form.password.title',
@@ -109,8 +160,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         $formPwd = $this->createForm(ChangePasswordFormType::class, null, [
-            'label' => true,
-            'action' => $this->generateUrl('custom_form_submit'),
+            'action' => $this->generateUrl('core_admin_user_administration_password_change'),
             'method' => 'POST',
         ]);
 
@@ -128,7 +178,7 @@ class UserController extends AbstractController
             $em->flush();
         }
 
-        return $this->redirectToRoute('core_admin_user_administration');
+        return $this->redirectToRoute('core_admin_user_administration_edit');
     }
 
     #[Route(path: '/administration/user-settings-change', name: 'core_admin_user_administration_user_settings_change', methods: ['POST'])]
@@ -140,26 +190,21 @@ class UserController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $formPwd = $this->createForm(ChangePasswordFormType::class, null, [
-            'label' => true,
-            'action' => $this->generateUrl('custom_form_submit'),
+        $formSettings = $this->createForm(UserEditFormType::class, null, [
+            'action' => $this->generateUrl('core_admin_user_administration_user_settings_change'),
             'method' => 'POST',
         ]);
 
-        $formPwd->handleRequest($rq);
+        $formSettings->handleRequest($rq);
 
-        if ($formPwd->isSubmitted() && $formPwd->isValid()) {
-            // Encode(hash) the plain password, and set it.
-            $encodedPassword = $passwordHasher->hashPassword(
-                $user,
-                $formPwd->get('password')->getData()
-            );
+        if ($formSettings->isSubmitted() && $formSettings->isValid()) {
+            $user->setEmail($formSettings->get('email')->getData());
+            $user->setRoles($formSettings->get('roles')->getData());
 
-            $user->setPassword($encodedPassword);
             $em->persist($user);
             $em->flush();
         }
 
-        return $this->redirectToRoute('core_admin_user_administration');
+        return $this->redirectToRoute('core_admin_user_administration_edit');
     }
 }
