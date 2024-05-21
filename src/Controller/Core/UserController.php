@@ -93,6 +93,8 @@ class UserController extends AbstractController
             $user->setPassword($encodedPassword);
             $em->persist($user);
             $em->flush();
+
+            return $this->redirectToRoute('core_admin_user_list');
         }
 
         return $this->render('core/users/user_create_form.html.twig', [
@@ -111,20 +113,31 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/administration/edit', name: 'core_admin_user_administration_edit', methods: ['GET'])]
+    #[Route(path: '/administration/delete/{user}', name: 'core_admin_user_administration_delete', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
-    public function userAdministrationEdit(): Response
+    public function userAdministrationDelete(User $user, EntityManagerInterface $em): Response
+    {
+        // TODO: jogosultság - UserVoter.php
+        $em->remove($user);
+        $em->flush();
+
+        return $this->redirectToRoute('core_admin_user_list');
+    }
+
+    #[Route(path: '/administration/edit/{user}', name: 'core_admin_user_administration_edit', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function userAdministrationEdit(User $user): Response
     {
         // TODO: jogosultság - UserVoter.php
 
         $formPwd = $this->createForm(ChangePasswordFormType::class, null, [
             'label' => true,
-            'action' => $this->generateUrl('core_admin_user_administration_password_change'),
+            'action' => $this->generateUrl('core_admin_user_administration_password_change', ['user' => $user->getId()]),
             'method' => 'POST',
         ]);
 
-        $formSettings = $this->createForm(UserEditFormType::class, null, [
-            'action' => $this->generateUrl('core_admin_user_administration_user_settings_change'),
+        $formSettings = $this->createForm(UserEditFormType::class, $user, [
+            'action' => $this->generateUrl('core_admin_user_administration_user_settings_change', ['user' => $user->getId()]),
             'method' => 'POST',
         ]);
 
@@ -150,17 +163,14 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/administration/password-change', name: 'core_admin_user_administration_password_change', methods: ['POST'])]
+    #[Route(path: '/administration/password-change/{user}', name: 'core_admin_user_administration_password_change', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function passwordChange(Request $rq, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
+    public function passwordChange(User $user, Request $rq, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
     {
         // TODO: jogosultság - UserVoter.php
 
-        /** @var User $user */
-        $user = $this->getUser();
-
         $formPwd = $this->createForm(ChangePasswordFormType::class, null, [
-            'action' => $this->generateUrl('core_admin_user_administration_password_change'),
+            'action' => $this->generateUrl('core_admin_user_administration_password_change', ['user' => $user->getId()]),
             'method' => 'POST',
         ]);
 
@@ -178,20 +188,17 @@ class UserController extends AbstractController
             $em->flush();
         }
 
-        return $this->redirectToRoute('core_admin_user_administration_edit');
+        return $this->redirectToRoute('core_admin_user_administration_edit', ['user' => $user->getId()]);
     }
 
-    #[Route(path: '/administration/user-settings-change', name: 'core_admin_user_administration_user_settings_change', methods: ['POST'])]
+    #[Route(path: '/administration/user-settings-change/{user}', name: 'core_admin_user_administration_user_settings_change', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function userSettingsChange(Request $rq, EntityManagerInterface $em): Response
+    public function userSettingsChange(User $user, Request $rq, EntityManagerInterface $em): Response
     {
         // TODO: jogosultság - UserVoter.php
 
-        /** @var User $user */
-        $user = $this->getUser();
-
         $formSettings = $this->createForm(UserEditFormType::class, null, [
-            'action' => $this->generateUrl('core_admin_user_administration_user_settings_change'),
+            'action' => $this->generateUrl('core_admin_user_administration_user_settings_change', ['user' => $user->getId()]),
             'method' => 'POST',
         ]);
 
@@ -205,6 +212,6 @@ class UserController extends AbstractController
             $em->flush();
         }
 
-        return $this->redirectToRoute('core_admin_user_administration_edit');
+        return $this->redirectToRoute('core_admin_user_administration_edit', ['user' => $user->getId()]);
     }
 }

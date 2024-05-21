@@ -3,6 +3,7 @@
 namespace App\Form\Core;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -37,12 +38,14 @@ class UserEditFormType extends AbstractType
                 ],
                 'label' => $this->tr->trans('form.settings.email_label', [], 'users'),
             ])
-            ->add('roles', TextType::class, [
+            ->add('roles', ChoiceType::class, [
                 'constraints' => [
                     new Assert\NotBlank([
                                             'message' => $this->tr->trans('form.settings.roles_not_blank', [], 'users'),
                                         ]),
                 ],
+                'choices' => $this->getRolesFormChoices(),
+                'multiple' => true,
                 'attr' => [
                     'autocomplete' => 'new-password',
                     'class' => 'form-control',
@@ -56,5 +59,14 @@ class UserEditFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([]);
+    }
+
+    private function getRolesFormChoices(): array
+    {
+        return [
+            $this->tr->trans('roles.ROLE_USER', [], 'roles') => 'ROLE_USER',
+            $this->tr->trans('roles.ROLE_ADMIN', [], 'roles') => 'ROLE_ADMIN',
+            $this->tr->trans('roles.ROLE_SUPER_ADMIN', [], 'roles') => 'ROLE_SUPER_ADMIN',
+        ];
     }
 }

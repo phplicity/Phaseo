@@ -1,0 +1,11 @@
+{% for button in buttons %}
+    {% if button == 'edit' %}
+        <a href="{{ path('core_admin_user_administration_edit', {user: userId}) }}" class="btn btn-primary">
+            <i class="fas fa-fw fa-edit"></i>
+        </a>
+    {% elseif button == 'delete' %}
+        <button type="button" class="btn btn-danger" onclick="openDeleteUserModal('{{ path('core_admin_user_administration_delete', {user: userId}) }}')">
+            <i class="fas fa-fw fa-trash"></i>
+        </button>
+    {% endif %}
+{% endfor %}

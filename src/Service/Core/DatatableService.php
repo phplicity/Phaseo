@@ -3,9 +3,15 @@
 namespace App\Service\Core;
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use Twig\Environment;
 
 readonly class DatatableService
 {
+    public function __construct(
+        private Environment $twig
+    )
+    {}
+
     public function getHeaders(string $prefix, array $columnNamesInOrder): array
     {
         return array_merge(
@@ -20,7 +26,7 @@ readonly class DatatableService
     {
         return [
             'data' => array_map(function (array $dbRow) use ($user) {
-                return array_merge(array_values($dbRow), $this->getButtonsByRoles($user));
+                return array_merge(array_values($dbRow), [$this->getButtonsByRoles($user, $dbRow['id'])]);
             }, $sqlResult['data']),
             'draw' => $draw,
             'recordsFiltered' => $sqlResult['recordsFiltered'],
@@ -28,14 +34,13 @@ readonly class DatatableService
         ];
     }
 
-    private function getButtonsByRoles(UserInterface $user): array
+    private function getButtonsByRoles(UserInterface $user, int $userId): string
     {
-        // TODO: kell egy HTML renderelés, amely visszaadja a gombokat html-ként
-        return [
-            'create',
+        $buttons = [
             'edit',
             'delete',
-            'restore',
         ];
+
+        return $this->twig->render('core/users/users_list_buttons.html.twig', ['buttons' => $buttons, 'userId' => $userId]);
     }
 }

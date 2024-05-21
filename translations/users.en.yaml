@@ -30,3 +30,9 @@ form:
     email_place_holder: Email address
     roles_label: Roles
     roles_place_holder: Roles
+modal:
+  delete:
+    title: Delete User
+    text: Are you sure to delete this user?
+    cancel: Cancel
+    delete: Delete

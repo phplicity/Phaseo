@@ -62,6 +62,26 @@
 
     </section>
     <!-- /.content -->
+
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">{{ 'modal.delete.title'|trans({}, 'users') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ 'modal.delete.text'|trans({}, 'users') }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'modal.delete.cancel'|trans({}, 'users') }}</button>
+                    <button type="button" class="btn btn-danger">{{ 'modal.delete.delete'|trans({}, 'users') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block bodyJavascripts %}
@@ -80,6 +100,14 @@
     <script src="{{ asset('core/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
     <script>
+        function openDeleteUserModal(url)
+        {
+            $("#deleteUserModal .btn-danger").on('click', function() {
+                window.location.href = url;
+            });
+            $("#deleteUserModal").modal('show');
+        }
+
         $(function () {
             $("#users-list").DataTable({
                 "ajax": "{{ path('core_admin_user_datatable_list') }}",
