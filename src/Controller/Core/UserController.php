@@ -18,10 +18,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/user')]
 class UserController extends AbstractController
 {
+    public function __construct(
+        private readonly TranslatorInterface $tr
+    )
+    {
+    }
+
     #[Route('/list', name: 'core_admin_user_list')]
     #[IsGranted('ROLE_USER')]
     public function userList(UserService $userService, DatatableService $datatableService): Response
@@ -94,6 +101,8 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
+            $this->addFlash('success', $this->tr->trans('flash.user_created', [], 'users'));
+
             return $this->redirectToRoute('core_admin_user_list');
         }
 
@@ -120,6 +129,8 @@ class UserController extends AbstractController
         // TODO: jogosultság - UserVoter.php
         $em->remove($user);
         $em->flush();
+
+        $this->addFlash('success', $this->tr->trans('flash.user_deleted', [], 'users'));
 
         return $this->redirectToRoute('core_admin_user_list');
     }
@@ -186,6 +197,8 @@ class UserController extends AbstractController
             $user->setPassword($encodedPassword);
             $em->persist($user);
             $em->flush();
+
+            $this->addFlash('success', $this->tr->trans('flash.user_password_updated', [], 'users'));
         }
 
         return $this->redirectToRoute('core_admin_user_administration_edit', ['user' => $user->getId()]);
@@ -210,6 +223,8 @@ class UserController extends AbstractController
 
             $em->persist($user);
             $em->flush();
+
+            $this->addFlash('success', $this->tr->trans('flash.user_settings_updated', [], 'users'));
         }
 
         return $this->redirectToRoute('core_admin_user_administration_edit', ['user' => $user->getId()]);

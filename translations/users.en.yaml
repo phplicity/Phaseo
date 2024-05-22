@@ -36,3 +36,8 @@ modal:
     text: Are you sure to delete this user?
     cancel: Cancel
     delete: Delete
+flash:
+  user_settings_updated: User's settings updated successfully
+  user_password_updated: User's password updated successfully
+  user_deleted: User deleted successfully
+  user_created: User created successfully

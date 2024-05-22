@@ -42,3 +42,5 @@ reset_password:
   reset:
     title: Reset your password
     sub_title: You are only one step a way from your new password, recover your password now.
+flash:
+  title: System Message

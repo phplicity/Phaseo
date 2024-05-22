@@ -1,0 +1,43 @@
+page:
+  html_title_list: Felhasználók | Lista
+  html_title_form: Felhasználók | Adminisztráció
+  title_list: Felhasználók
+  title_form: Felhasználó Adminisztráció
+  buttons:
+    add_new_user: Új Felhasználó
+    users_list: Felhasználók listája
+datatable:
+  title: Felhasználók listája
+  headers:
+    id: Azonosító
+    email: Emailcím
+    roles: Jogok
+    actions: Műveletek
+form:
+  password:
+    title: Jelszó Változtatás
+    button: Jelszó cseréje
+  create:
+    title: Felhasználó Létrehozás
+    button: Felhasználó Létrehozása
+  settings:
+    title: Beállítások Változtatása
+    button: Beállítások Mentése
+    email_not_blank: Az emailcím kitöltése kötelező
+    email_not_valid: Az emailcím nem valós
+    roles_not_blank: Minimum egy jogot ki kell választani
+    email_label: Email
+    email_place_holder: Emailcím
+    roles_label: Jogok
+    roles_place_holder: Jogok
+modal:
+  delete:
+    title: Felhasználó Törlése
+    text: Biztos vagy benne, hogy törlöd a felhasználót?
+    cancel: Mégsem
+    delete: Törlés
+flash:
+  user_settings_updated: A felhasználó beállításai sikeresen módosultak
+  user_password_updated: A felhasználó jelszava sikeresen módosult
+  user_deleted: A felhasználó törlése sikeres
+  user_created: A felhasználó létrehozása sikeres

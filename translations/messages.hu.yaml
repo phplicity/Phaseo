@@ -42,3 +42,5 @@ reset_password:
   reset:
     title: Jelszó cseréje
     sub_title: Egy lépésre vagy az új jelszavad beállításától, cseréld le a jelszavad most.
+flash:
+  title: Rendszer Üzenet
